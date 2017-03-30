@@ -30,6 +30,8 @@ class MessagesViewController: MSMessagesAppViewController {
         //create a child view controller
         guard let vc = storyboard?.instantiateViewController(withIdentifier: identifier) as? EventViewController else {return }
         
+        vc.delegate = self
+        
         //add a child to the parent 
         addChildViewController(vc)
         
@@ -51,7 +53,58 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     
+    func createMessage(with dates: [Date], votes:  [Int]) {
+        
+        //return extension to compact mode
+        requestPresentationStyle(.compact)
+        
+        //check if conversaiton exists 
+        guard let conversation = activeConversation else { return}
+        
+        //convert dates to URL query for Messages
+        var componenets = URLComponents()
+        var items = [URLQueryItem]()
+        
+        for (index, date) in dates.enumerated() {
+            let dateItem = URLQueryItem(name: "date - \(index)", value: string(from: date))
+            items.append(dateItem)
+            
+            let voteItem = URLQueryItem(name: "vote - \(index)", value: String(votes[index]))
+            items.append(voteItem)
+        }
+        
+        componenets.queryItems = items
+        
+        
+        //use a existing session or create a new one
+        let session = conversation.selectedMessage?.session ?? MSSession()
+        
+        //create a new message, assign it the URL we made earlier
+        let message = MSMessage(session: session)
+        message.url = componenets.url
+        
+        
+        //create a blank, defualt message layout
+        let layout = MSMessageTemplateLayout()
+        message.layout = layout
+        
+        //insert it into the convo
+        conversation.insert(message) { error in
+            if let error = error{
+                print(error)
+            }
+        }
+        
+    }
     
+    
+    func string(from date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyy-MM-dd-HH-mm"
+        
+        return dateFormatter.string(from: date)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
