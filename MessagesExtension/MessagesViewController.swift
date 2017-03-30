@@ -16,95 +16,150 @@ class MessagesViewController: MSMessagesAppViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func createNewEvent(_ sender: Any) {
+    @IBAction func createNewEvent(_ sender: AnyObject) {
         
         requestPresentationStyle(.expanded)
     }
     
-    
-    func displayEventController(conversation: MSConversation?, identifier: String){
+    func displayEventController(conversation: MSConversation?, identifier: String) {
         
-        //check for conversation
+        //check if convo exists
         guard let conversation = conversation else { return }
         
-        //create a child view controller
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: identifier) as? EventViewController else {return }
+        //create a child view
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: identifier) as? EventViewController else { return }
         
-        vc.delegate = self
+        vc.load(from: conversation.selectedMessage)
         
-        //add a child to the parent 
+        vc.delegate =  self
+        
+        //add child view to parent
         addChildViewController(vc)
         
-        //make child fill our view
+        
+        //show child view to user
         vc.view.frame = view.bounds
         vc.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(vc.view)
         
-        //add constraints
+        
+        
+        //add constraints to child view for clean UI
         vc.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         vc.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         vc.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         vc.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        //tell child its now in parent view
+        //tell child its under the parent
         vc.didMove(toParentViewController: self)
-        
-        
     }
     
-    
-    func createMessage(with dates: [Date], votes:  [Int]) {
+    func createMessage(with dates: [Date], votes: [Int]) {
         
-        //return extension to compact mode
+        //go back to compact view
         requestPresentationStyle(.compact)
         
-        //check if conversaiton exists 
-        guard let conversation = activeConversation else { return}
         
-        //convert dates to URL query for Messages
-        var componenets = URLComponents()
+        //check if convo exists
+        guard let conversation = activeConversation else { return }
+        
+        //convert dates and votes into URLQueryItem objects
+        
+        var components = URLComponents()
         var items = [URLQueryItem]()
         
         for (index, date) in dates.enumerated() {
-            let dateItem = URLQueryItem(name: "date - \(index)", value: string(from: date))
+            let dateItem = URLQueryItem(name: "date-\(index)", value: string(from: date))
             items.append(dateItem)
             
-            let voteItem = URLQueryItem(name: "vote - \(index)", value: String(votes[index]))
+            let voteItem = URLQueryItem(name: "vote-\(index)", value: String(votes[index]))
             items.append(voteItem)
         }
         
-        componenets.queryItems = items
+        components.queryItems = items
         
-        
-        //use a existing session or create a new one
+        //use the exiting session or create a new one
         let session = conversation.selectedMessage?.session ?? MSSession()
         
-        //create a new message, assign it the URL we made earlier
+        
+        
+        //create a new message from the session and assign it the URL we created from our dates and votes
         let message = MSMessage(session: session)
-        message.url = componenets.url
+        message.url = components.url
         
         
-        //create a blank, defualt message layout
+        
+        //create a blank default message layout
+        
         let layout = MSMessageTemplateLayout()
+        layout.image = render(dates: dates)
+        layout.caption = "I voted"
         message.layout = layout
         
-        //insert it into the convo
+        //insert it into the conversation
         conversation.insert(message) { error in
-            if let error = error{
+            if let error = error {
                 print(error)
             }
         }
-        
     }
     
-    
     func string(from date: Date) -> String {
+        
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.dateFormat = "yyyy-MM-dd-HH-mm"
         
         return dateFormatter.string(from: date)
     }
+    
+    func render(dates: [Date]) -> UIImage {
+        
+        //20-point padding for clarity
+        let inset: CGFloat = 20
+        
+        
+        // create the attributes for drawing using Dynamic Type so that we respect the user's font choices
+        let attributes = [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body), NSForegroundColorAttributeName: UIColor.darkGray]
+        
+        // make a single string out of all the dates
+        var stringToRender = ""
+        
+        dates.forEach {
+            stringToRender += DateFormatter.localizedString(from: $0, dateStyle: .long, timeStyle: .short) + "\n"
+        }
+        
+        // trim the last line break, then create an attributed string by merging the date string and the attributes
+        let trimmed = stringToRender.trimmingCharacters(in: .whitespacesAndNewlines)
+        let attributedString = NSAttributedString(string: trimmed, attributes: attributes)
+        
+        // calculate the size required to draw the attributed string, then add the inset to all edges
+        var imageSize = attributedString.size()
+        imageSize.width += inset * 2
+        imageSize.height += inset * 2
+        
+        // create an image format that uses @3x scale on an opaque background
+        let format = UIGraphicsImageRendererFormat()
+        format.opaque = true
+        format.scale = 3
+        
+        // create a renderer at the correct size, using the above format
+        let renderer = UIGraphicsImageRenderer(size: imageSize, format: format)
+        
+        // render a series of instructions to `image`
+        let image = renderer.image { ctx in
+            // draw a solid white background
+            UIColor.white.set()
+            ctx.fill(CGRect(origin: CGPoint.zero, size: imageSize))
+            
+            // now render our text on top, using the insets we created
+            attributedString.draw(at: CGPoint(x: inset, y: inset))
+        }
+        
+        // send the resulting image back
+        return image
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -116,8 +171,11 @@ class MessagesViewController: MSMessagesAppViewController {
     override func willBecomeActive(with conversation: MSConversation) {
         // Called when the extension is about to move from the inactive to active state.
         // This will happen when the extension is about to present UI.
-        
         // Use this method to configure the extension and restore previously stored state.
+        
+        if presentationStyle == .expanded {
+            displayEventController(conversation: conversation, identifier: "SelectDates")
+        }
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -129,7 +187,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // and store enough state information to restore your extension to its current state
         // in case it is terminated later.
     }
-   
+    
     override func didReceive(_ message: MSMessage, conversation: MSConversation) {
         // Called when a message arrives that was generated by another instance of this
         // extension on a remote device.
@@ -143,20 +201,11 @@ class MessagesViewController: MSMessagesAppViewController {
     
     override func didCancelSending(_ message: MSMessage, conversation: MSConversation) {
         // Called when the user deletes the message without sending it.
-    
+        
         // Use this to clean up state related to the deleted message.
     }
     
-    
-    
-    //below function runs when transitioning from compact to expanded views
-    
-        //then it removes all the child view from the parent for proper transition in view
-    
     override func willTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
-        // Called before the extension transitions to a new presentation style.
-    
-        // Use this method to prepare for the change in presentation style.
         
         for child in childViewControllers {
             child.willMove(toParentViewController: nil)
@@ -164,18 +213,14 @@ class MessagesViewController: MSMessagesAppViewController {
             child.removeFromParentViewController()
         }
         
-        //if we are entereing expanded mode, displayevent is called
         if presentationStyle == .expanded {
             displayEventController(conversation: activeConversation, identifier: "CreateEvent")
         }
     }
     
-    
-    
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
-    
+        
         // Use this method to finalize any behaviors associated with the change in presentation style.
     }
-
 }

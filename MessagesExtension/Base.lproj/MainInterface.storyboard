@@ -101,17 +101,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="0XX-Rl-YuH">
-                                <rect key="frame" x="113.5" y="623" width="148" height="44"/>
+                                <rect key="frame" x="114.5" y="623" width="146" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jF5-wt-Qnr">
-                                        <rect key="frame" x="0.0" y="0.0" width="64" height="44"/>
-                                        <state key="normal" title="Add Date"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="62" height="44"/>
+                                        <state key="normal" title="Add date"/>
                                         <connections>
                                             <action selector="addDate:" destination="ifi-hH-cGG" eventType="touchUpInside" id="Gf1-fV-zjz"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eH2-HC-3xv">
-                                        <rect key="frame" x="104" y="0.0" width="44" height="44"/>
+                                        <rect key="frame" x="102" y="0.0" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="IMS-7G-jeg"/>
                                         </constraints>
