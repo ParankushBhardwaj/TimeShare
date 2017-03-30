@@ -13,6 +13,7 @@
 		1D6886E41E8D48460051492C /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6886E31E8D48460051492C /* MessagesViewController.swift */; };
 		1D6886E71E8D48460051492C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1D6886E51E8D48460051492C /* MainInterface.storyboard */; };
 		1D6886E91E8D48460051492C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D6886E81E8D48460051492C /* Assets.xcassets */; };
+		1D6886F51E8D50A70051492C /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6886F41E8D50A70051492C /* EventViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		1D6886E61E8D48460051492C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		1D6886E81E8D48460051492C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1D6886EA1E8D48460051492C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1D6886F41E8D50A70051492C /* EventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 		1D6886E21E8D48460051492C /* MessagesExtension */ = {
 			isa = PBXGroup;
 			children = (
+				1D6886F41E8D50A70051492C /* EventViewController.swift */,
 				1D6886E31E8D48460051492C /* MessagesViewController.swift */,
 				1D6886E51E8D48460051492C /* MainInterface.storyboard */,
 				1D6886E81E8D48460051492C /* Assets.xcassets */,
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D6886E41E8D48460051492C /* MessagesViewController.swift in Sources */,
+				1D6886F51E8D50A70051492C /* EventViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

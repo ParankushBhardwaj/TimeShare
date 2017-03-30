@@ -28,6 +28,9 @@
                                     <constraint firstAttribute="height" constant="44" id="cjM-Xm-TGp"/>
                                 </constraints>
                                 <state key="normal" title="Create New Event"/>
+                                <connections>
+                                    <action selector="createNewEvent:" destination="ObA-dk-sSI" eventType="touchUpInside" id="WyW-lA-QcV"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -42,10 +45,10 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
-        <!--View Controller-->
+        <!--Event View Controller-->
         <scene sceneID="X04-ld-Kb8">
             <objects>
-                <viewController storyboardIdentifier="CreateEvent" id="ifi-hH-cGG" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateEvent" id="ifi-hH-cGG" customClass="EventViewController" customModule="MessagesExtension" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hQY-09-N2N"/>
                         <viewControllerLayoutGuide type="bottom" id="QGf-Pa-a1O"/>
@@ -76,6 +79,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="ifi-hH-cGG" id="6GR-Ed-pDP"/>
+                                    <outlet property="delegate" destination="ifi-hH-cGG" id="5QU-0r-Pvn"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nnW-9z-GaY">
                                 <rect key="frame" x="16" y="407" width="343" height="216"/>
@@ -99,6 +106,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jF5-wt-Qnr">
                                         <rect key="frame" x="0.0" y="0.0" width="64" height="44"/>
                                         <state key="normal" title="Add Date"/>
+                                        <connections>
+                                            <action selector="addDate:" destination="ifi-hH-cGG" eventType="touchUpInside" id="Gf1-fV-zjz"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eH2-HC-3xv">
                                         <rect key="frame" x="104" y="0.0" width="44" height="44"/>
@@ -107,6 +117,9 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" title="Save"/>
+                                        <connections>
+                                            <action selector="saveSelectedDates:" destination="ifi-hH-cGG" eventType="touchUpInside" id="J7X-II-MdZ"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -127,10 +140,92 @@
                             <constraint firstItem="nnW-9z-GaY" firstAttribute="leading" secondItem="Flv-IB-y37" secondAttribute="leadingMargin" id="wRw-O9-6Hh"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="datePicker" destination="gKk-on-1Qs" id="IcS-1M-6Ht"/>
+                        <outlet property="tableView" destination="qV9-ZE-Be7" id="YHM-59-g2l"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CHS-ma-U0y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1164" y="186.65667166416793"/>
+        </scene>
+        <!--Event View Controller-->
+        <scene sceneID="RxX-gc-Lon">
+            <objects>
+                <viewController storyboardIdentifier="SelectDates" id="cxG-fb-Hub" customClass="EventViewController" customModule="MessagesExtension" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wMq-Sq-q8W"/>
+                        <viewControllerLayoutGuide type="bottom" id="nOH-OS-U5S"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fxn-QY-taU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8IB-fR-zJe">
+                                <rect key="frame" x="16" y="20" width="343" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Date" textLabel="JYa-nS-pW8" detailTextLabel="2xN-fn-4LZ" style="IBUITableViewCellStyleSubtitle" id="hm1-14-Ps6">
+                                        <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hm1-14-Ps6" id="4L4-j1-pZP">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JYa-nS-pW8">
+                                                    <rect key="frame" x="15" y="5" width="33.5" height="20.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2xN-fn-4LZ">
+                                                    <rect key="frame" x="15" y="25.5" width="44" height="14.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="cxG-fb-Hub" id="XkD-Ld-3EM"/>
+                                    <outlet property="delegate" destination="cxG-fb-Hub" id="frQ-ak-kNL"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZuW-Ys-Vuc">
+                                <rect key="frame" x="165.5" y="623" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="eqz-mu-Qyh"/>
+                                    <constraint firstAttribute="width" constant="44" id="w7z-1U-ha4"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveSelectedDates:" destination="cxG-fb-Hub" eventType="touchUpInside" id="GGa-aI-qFE"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ZuW-Ys-Vuc" firstAttribute="centerX" secondItem="fxn-QY-taU" secondAttribute="centerX" id="3IK-VP-llI"/>
+                            <constraint firstItem="ZuW-Ys-Vuc" firstAttribute="top" secondItem="8IB-fR-zJe" secondAttribute="bottom" id="AWm-sG-MNc"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="8IB-fR-zJe" secondAttribute="trailing" id="Vtd-um-2jF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="8IB-fR-zJe" secondAttribute="trailing" id="aWb-vv-52D"/>
+                            <constraint firstItem="8IB-fR-zJe" firstAttribute="leading" secondItem="fxn-QY-taU" secondAttribute="leadingMargin" id="jHC-fM-Lwl"/>
+                            <constraint firstItem="nOH-OS-U5S" firstAttribute="top" secondItem="ZuW-Ys-Vuc" secondAttribute="bottom" id="jZD-Bg-53H"/>
+                            <constraint firstItem="8IB-fR-zJe" firstAttribute="top" secondItem="wMq-Sq-q8W" secondAttribute="bottom" id="wLX-Za-Pi4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="8IB-fR-zJe" id="p8k-pu-H6e"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oSW-du-BoG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2008.8" y="186.65667166416793"/>
         </scene>
     </scenes>
 </document>
