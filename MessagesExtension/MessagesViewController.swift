@@ -17,7 +17,40 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     @IBAction func createNewEvent(_ sender: Any) {
+        
+        requestPresentationStyle(.expanded)
     }
+    
+    
+    func displayEventController(conversation: MSConversation?, identifier: String){
+        
+        //check for conversation
+        guard let conversation = conversation else { return }
+        
+        //create a child view controller
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: identifier) as? EventViewController else {return }
+        
+        //add a child to the parent 
+        addChildViewController(vc)
+        
+        //make child fill our view
+        vc.view.frame = view.bounds
+        vc.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(vc.view)
+        
+        //add constraints
+        vc.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        vc.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        vc.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        vc.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        //tell child its now in parent view
+        vc.didMove(toParentViewController: self)
+        
+        
+    }
+    
+    
     
     
     override func didReceiveMemoryWarning() {
@@ -61,11 +94,30 @@ class MessagesViewController: MSMessagesAppViewController {
         // Use this to clean up state related to the deleted message.
     }
     
+    
+    
+    //below function runs when transitioning from compact to expanded views
+    
+        //then it removes all the child view from the parent for proper transition in view
+    
     override func willTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called before the extension transitions to a new presentation style.
     
         // Use this method to prepare for the change in presentation style.
+        
+        for child in childViewControllers {
+            child.willMove(toParentViewController: nil)
+            child.view.removeFromSuperview()
+            child.removeFromParentViewController()
+        }
+        
+        //if we are entereing expanded mode, displayevent is called
+        if presentationStyle == .expanded {
+            displayEventController(conversation: activeConversation, identifier: "CreateEvent")
+        }
     }
+    
+    
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
