@@ -159,6 +159,7 @@
 				TargetAttributes = {
 					1D6886D01E8D48460051492C = {
 						CreatedOnToolsVersion = 8.3;
+						DevelopmentTeam = K7PJHE383W;
 						ProvisioningStyle = Automatic;
 					};
 					1D6886DA1E8D48460051492C = {
@@ -363,6 +364,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = K7PJHE383W;
 				INFOPLIST_FILE = TimeShare/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = HumblyHuman.TimeShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -375,6 +377,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = K7PJHE383W;
 				INFOPLIST_FILE = TimeShare/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = HumblyHuman.TimeShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
